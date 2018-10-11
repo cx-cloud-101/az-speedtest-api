@@ -23,3 +23,14 @@ Azure implementation of the speedtest api
 	"data": "my-test-data"
 }
 ```
+
+### Create new Event Hub on Azure
+
+* New Resource group: tae-cloud101
+* New Event Hubs: tae-speedtest-events, Pricing: Basic, resource group: tae-cloud101, location: west europe
+* I Event Hubs -> New event hub: speedtest-events
+
+### Koble speedtest-api til Event Hub
+
+* `dotnet add package Microsoft.Azure.EventHubs`
+* New /Service and SpeedtestEvents
