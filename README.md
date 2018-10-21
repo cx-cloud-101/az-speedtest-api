@@ -5,7 +5,7 @@ Azure implementation of the speedtest api
 
 ### Dotnet new
 
-* New webapi with `dotnet new webapi -o SpeedtestApi`
+* New webapi with `dotnet new webapi -o SpeedTestApi`
 * GET https://localhost:5001/api/values (remember to turn off SSL valiadaton in Postman)
 * Add .gitignore
 
@@ -33,4 +33,4 @@ Azure implementation of the speedtest api
 ### Koble speedtest-api til Event Hub
 
 * `dotnet add package Microsoft.Azure.EventHubs`
-* New /Service and SpeedtestEvents
+* New /Service and SpeedTestEvents
