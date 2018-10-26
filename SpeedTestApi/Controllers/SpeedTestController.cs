@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SpeedTestApi.Models;
+using SpeedTestApi.Services;
 
 namespace SpeedTestApi.Controllers
 {
@@ -9,16 +11,18 @@ namespace SpeedTestApi.Controllers
     [ApiController]
     public class SpeedTestController : ControllerBase
     {
+        private readonly ISpeedTestEvents _eventHub;
+
+        public SpeedTestController(ISpeedTestEvents eventHub)
+        {
+            _eventHub = eventHub;
+        }
+        
         // POST /SpeedTest
         [HttpPost]
-        public IActionResult Post([FromBody] TestResult SpeedTest)
+        public async Task<IActionResult> Post([FromBody] TestResult speedTest)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            
-            Console.WriteLine($"I got: { JsonConvert.SerializeObject(SpeedTest) }");
+            await _eventHub.PublishSpeedTest(speedTest);
 
             return Ok();
         }
