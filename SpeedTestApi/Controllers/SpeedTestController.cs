@@ -21,7 +21,7 @@ namespace SpeedTestApi.Controllers
         }
 
         // GET /ping
-        [Route("/ping")]
+        [Route("ping")]
         [HttpGet]
         public IActionResult Ping()
         {
