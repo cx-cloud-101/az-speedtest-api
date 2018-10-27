@@ -13,9 +13,6 @@ namespace SpeedTestApi.Services
 
         public SpeedTestEvents(string connectionString, string entityPath)
         {
-            // Creates an EventHubsConnectionStringBuilder object from the connection string, and sets the EntityPath.
-            // Typically, the connection string should have the entity path in it, but this simple scenario
-            // uses the connection string from the namespace.
             var connectionStringBuilder = new EventHubsConnectionStringBuilder(connectionString)
             {
                 EntityPath = entityPath

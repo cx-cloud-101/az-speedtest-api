@@ -5,6 +5,9 @@ namespace SpeedTestApi.Models
 {
     public class TestResult
     {
+        [Required]
+        public Guid SessionId { get; set; }
+
         [StringLength(500, MinimumLength = 2)]
         [Required]
         public string User { get; set; }
