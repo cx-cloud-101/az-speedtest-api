@@ -19,10 +19,18 @@ namespace SpeedTestApi.Controllers
             _eventHub = eventHub;
             _authorization = authorization;
         }
+
+        // GET /ping
+        [Route("/ping")]
+        [HttpGet]
+        public IActionResult Ping()
+        {
+            return Ok("PONG");
+        }
         
         // POST /SpeedTest
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TestResult speedTest)
+        public async Task<IActionResult> UploadSpeedTest([FromBody] TestResult speedTest)
         {
             if (speedTest.User != _authorization.AuthorizedUser)
             {
