@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SpeedTestApi.Models;
 using SpeedTestApi.Services;
 
@@ -27,7 +25,7 @@ namespace SpeedTestApi.Controllers
         {
             return Ok("PONG");
         }
-        
+
         // POST /SpeedTest
         [HttpPost]
         public async Task<IActionResult> UploadSpeedTest([FromBody] TestResult speedTest)
@@ -36,7 +34,7 @@ namespace SpeedTestApi.Controllers
             {
                 return Unauthorized();
             }
-            
+
             await _eventHub.PublishSpeedTest(speedTest);
 
             return Ok();

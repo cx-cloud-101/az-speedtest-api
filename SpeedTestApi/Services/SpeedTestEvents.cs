@@ -1,8 +1,8 @@
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
-using Newtonsoft.Json;
 using SpeedTestApi.Models;
 
 namespace SpeedTestApi.Services
@@ -17,15 +17,15 @@ namespace SpeedTestApi.Services
             {
                 EntityPath = entityPath
             };
-            
+
             client = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
         }
 
         public async Task PublishSpeedTest(TestResult speedTest)
         {
-            var message = JsonConvert.SerializeObject(speedTest);
+            var message = JsonSerializer.Serialize(speedTest);
             var data = new EventData(Encoding.UTF8.GetBytes(message));
-            
+
             await client.SendAsync(data);
         }
 
