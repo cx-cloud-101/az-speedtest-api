@@ -32,5 +32,5 @@ Azure implementation of the speedtest api
 
 ### Koble speedtest-api til Event Hub
 
-* `dotnet add package Microsoft.Azure.EventHubs`
+* `dotnet add package Azure.Messaging.EventHubs`
 * New /Service and SpeedTestEvents
