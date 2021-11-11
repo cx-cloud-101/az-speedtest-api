@@ -1,43 +1,43 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
 using SpeedTestApi.Models;
 using SpeedTestApi.Services;
+using System.Threading.Tasks;
 
 namespace SpeedTestApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class SpeedTestController : ControllerBase
     {
+        private readonly ILogger _logger;
         private readonly ISpeedTestEvents _eventHub;
-        private readonly IAuthorization _authorization;
 
-        public SpeedTestController(ISpeedTestEvents eventHub, IAuthorization authorization)
+        public SpeedTestController(ILogger<SpeedTestController> logger, ISpeedTestEvents eventHub)
         {
+            _logger = logger;
             _eventHub = eventHub;
-            _authorization = authorization;
         }
 
-        // GET /ping
+        // GET speedtest/ping
         [Route("ping")]
         [HttpGet]
-        public IActionResult Ping()
+        public string Ping()
         {
-            return Ok("PONG");
+            return "PONG";
         }
 
-        // POST /SpeedTest
+        // POST speedtest/
         [HttpPost]
-        public async Task<IActionResult> UploadSpeedTest([FromBody] TestResult speedTest)
+        public async Task<string> UploadSpeedTest([FromBody] TestResult speedTest)
         {
-            if (speedTest.User != _authorization.AuthorizedUser)
-            {
-                return Unauthorized();
-            }
-
             await _eventHub.PublishSpeedTest(speedTest);
 
-            return Ok();
+            var response = $"Got a TestResult from { speedTest.User } with download { speedTest.Data.Speeds.Download } Mbps.";
+            _logger.LogInformation(response);
+
+            return response;
         }
     }
 }

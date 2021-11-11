@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpeedTestApi.Models;
+using Microsoft.OpenApi.Models;
 using SpeedTestApi.Services;
 
 namespace SpeedTestApi
@@ -20,14 +20,7 @@ namespace SpeedTestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var authorizedUser = Configuration.GetValue<string>("AuthorizedUser");
-            services.AddSingleton<IAuthorization, Authorization>(cts =>
-            {
-                return new Authorization
-                {
-                    AuthorizedUser = authorizedUser
-                };
-            });
+            services.AddControllers();
 
             var connectionString = Configuration.GetValue<string>("EventHub:ConnectionString");
             var entityPath = Configuration.GetValue<string>("EventHub:EntityPath");
@@ -36,24 +29,32 @@ namespace SpeedTestApi
                 return new SpeedTestEvents(connectionString, entityPath);
             });
 
-            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SpeedTestApi", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-                app.UseHttpsRedirection();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SpeedTestApi v1"));
             }
 
+            app.UseHttpsRedirection();
+
             app.UseRouting();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
