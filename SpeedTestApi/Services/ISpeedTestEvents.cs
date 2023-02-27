@@ -1,11 +1,8 @@
-using System.Threading.Tasks;
+﻿using SpeedTestLogger.Models;
 
-using SpeedTestApi.Models;
+namespace SpeedTestApi.Services;
 
-namespace SpeedTestApi.Services
+public interface ISpeedTestEvents
 {
-    public interface ISpeedTestEvents
-    {
-        Task PublishSpeedTest(TestResult speedTest);
-    }
+    Task PublishSpeedTest(TestResult speedTest);
 }
